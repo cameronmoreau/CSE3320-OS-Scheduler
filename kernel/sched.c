@@ -6236,6 +6236,7 @@ static int __sched_setscheduler(struct task_struct *p, int policy,
 	struct rq *rq;
 	int reset_on_fork;
 
+
 	/* may grab non-irq protected spin_locks */
 	BUG_ON(in_interrupt());
 recheck:
@@ -6249,21 +6250,22 @@ recheck:
 
 		if (policy != SCHED_FIFO && policy != SCHED_RR &&
 				policy != SCHED_NORMAL && policy != SCHED_BATCH &&
-				policy != SCHED_IDLE)
+				policy != SCHED_IDLE && policy != SCHED_WRR) /* Cameron: Added WRR */
 			return -EINVAL;
 	}
-
 	/*
 	 * Valid priorities for SCHED_FIFO and SCHED_RR are
 	 * 1..MAX_USER_RT_PRIO-1, valid priority for SCHED_NORMAL,
 	 * SCHED_BATCH and SCHED_IDLE is 0.
 	 */
+	if(policy != SCHED_WRR) {
 	if (param->sched_priority < 0 ||
 	    (p->mm && param->sched_priority > MAX_USER_RT_PRIO-1) ||
 	    (!p->mm && param->sched_priority > MAX_RT_PRIO-1))
 		return -EINVAL;
 	if (rt_policy(policy) != (param->sched_priority != 0))
 		return -EINVAL;
+	}
 
 	/*
 	 * Allow unprivileged RT tasks to decrease priority:
@@ -6442,9 +6444,10 @@ SYSCALL_DEFINE3(set_wrr_scheduler, pid_t, pid, int, policy,
 	struct sched_param params = {
 		.sched_priority = weight
 	};
-
+	
 	printk(KERN_EMERG "[WRR] Set WRR Scheduler\n\t=> pid: %d\n\t=> policy: %d\n\t=> weight: %d\n", pid, policy, weight);
 	return sched_setscheduler_nocheck(task, policy, &params);
+	/*return do_sched_setscheduler(pid, policy, &params);*/
 }
 /**
  * sys_sched_setparam - set/change the RT priority of a thread
