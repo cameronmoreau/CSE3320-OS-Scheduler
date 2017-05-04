@@ -1213,6 +1213,10 @@ struct sched_rt_entity {
 //added by Jia Rao: define the wrr entity. 
 //It should at least include the pointer to the runqueue and its weight
 struct sched_wrr_entity {
+	struct list_head run_list;
+	unsigned long timeout;
+	unsigned int time_slice;
+	unsigned int weight;
 };
 
 struct rcu_node;

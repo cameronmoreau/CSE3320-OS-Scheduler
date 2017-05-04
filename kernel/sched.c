@@ -6197,6 +6197,8 @@ __setscheduler(struct rq *rq, struct task_struct *p, int policy, int prio)
 	case SCHED_RR:
 		p->sched_class = &rt_sched_class;
 		break;
+
+	// TODO: Add stuff
 	case SCHED_WRR:
 		p->sched_class = &wrr_sched_class;
 		break;
@@ -6435,8 +6437,14 @@ SYSCALL_DEFINE3(sched_setscheduler, pid_t, pid, int, policy,
 SYSCALL_DEFINE3(set_wrr_scheduler, pid_t, pid, int, policy,
 		int, weight)
 {
+	struct task_struct *task = find_task_by_vpid(pid);
+	
+	struct sched_param params = {
+		.sched_priority = weight
+	};
+
 	printk(KERN_EMERG "[WRR] Set WRR Scheduler\n\t=> pid: %d\n\t=> policy: %d\n\t=> weight: %d\n", pid, policy, weight);
-	return 0;
+	return sched_setscheduler_nocheck(task, policy, &params);
 }
 /**
  * sys_sched_setparam - set/change the RT priority of a thread
