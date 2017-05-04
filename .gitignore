@@ -2,6 +2,23 @@
 */
 !.gitignore
 
+!arch/
+arch/*
+!arch/x86
+arch/x86/*
+
+!arch/x86/include/
+arch/x86/include/*
+!arch/x86/include/asm/
+arch/x86/include/asm/*
+!arch/x86/include/asm/unistd_32.h
+!arch/x86/include/asm/syscall.h
+
+
+!arch/x86/kernel/
+arch/x86/kernel/*
+!arch/x86/kernel/syscall_table_32.S
+
 !kernel/
 kernel/*
 !kernel/sched_wrr.c
