@@ -48,7 +48,17 @@ static void check_preempt_curr_wrr(struct rq *rq, struct task_struct *p, int fla
 
 static struct task_struct *pick_next_task_wrr(struct rq *rq)
 {
+	struct sched_wrr_entity *container;
+	struct list_head *head;
+	struct task_struct *next_task = NULL;
+
 	printk(KERN_EMERG "[WRR] Pick Next Task\n");
+
+	head = &(rq->wrr.ready_list);
+	next_task = list_entry(head->next, struct sched_wrr_entity, run_list);
+
+
+	return next_task;
 }
 
 static void put_prev_task_wrr(struct rq *rq, struct task_struct *p)
