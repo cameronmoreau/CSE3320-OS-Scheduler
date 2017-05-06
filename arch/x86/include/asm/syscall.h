@@ -211,6 +211,7 @@ static inline void syscall_set_arguments(struct task_struct *task,
 
 asmlinkage int sys_helloworld(void);
 asmlinkage int sys_set_wrr_scheduler(int pid, int weight);
+asmlinkage int sys_get_wrr_weight(int pid);
 
 #endif	/* CONFIG_X86_32 */
 

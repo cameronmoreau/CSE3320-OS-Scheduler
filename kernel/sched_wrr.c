@@ -4,14 +4,24 @@
  */
 
 
+/* My shitty code begins here */
+
 static void enqueue_task_wrr(struct rq *rq, struct task_struct *p, int wakeup)
 {
-	printk(KERN_EMERG "[WRR] Enqueue Task\n");
+	printk(KERN_EMERG "[WRR] Enqueue Task\n\t=> task: %ld\n\t=> n: %d", (unsigned long int)p, rq->wrr.num_running);
+	
+	//if(wakeup) &(p->wrr->timeout) = 0;
+
+	list_add_tail(&(p->wrr.run_list), &(rq->wrr.ready_list));
+	rq->wrr.num_running++;
 }
 
 static void dequeue_task_wrr(struct rq *rq, struct task_struct *p, int sleep)
 {
-	printk(KERN_EMERG "[WRR] Dequeue Task\n");
+	printk(KERN_EMERG "[WRR] Dequeue Task\n\t=> task: %ld\n\t=> n: %d", (unsigned long int)p, rq->wrr.num_running);
+
+	list_del(&(p->wrr.run_list));
+	rq->wrr.num_running--;
 }
 
 static void
@@ -23,6 +33,8 @@ requeue_wrr_entity(struct wrr_rq *wrr_rq, struct sched_wrr_entity *wrr_se, int h
 static void requeue_task_wrr(struct rq *rq, struct task_struct *p, int head)
 {
 	printk(KERN_EMERG "[WRR] Requeue Task\n");
+	
+	list_move_tail(&(p->wrr.run_list), &(rq->wrr.ready_list));
 }
 
 static void yield_task_wrr(struct rq *rq)

@@ -338,5 +338,4 @@ ENTRY(sys_call_table)
 	.long sys_perf_event_open
 	.long sys_helloworld				/* 337 */
 	.long sys_set_wrr_scheduler	/* 338 */
-	/*.long sys_set_wrr_scheduler*/	/* 338 */
-	/*.long sys_get_wrr_weight*/	/* 337 */
+	.long sys_get_wrr_weight	/* 339*/

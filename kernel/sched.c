@@ -484,6 +484,9 @@ struct rt_rq {
 
 /* added by Jia Rao: define wrr runqueue here */
 struct wrr_rq {
+	struct list_head ready_list;
+	struct rq *rq;
+	int num_running;
 };
 #ifdef CONFIG_SMP
 
@@ -9325,6 +9328,9 @@ static void init_rt_rq(struct rt_rq *rt_rq, struct rq *rq)
 static void init_wrr_rq(struct wrr_rq *wrr_rq, struct rq *rq)
 {
 	printk(KERN_EMERG "[WRR] Init WRR rq\n");
+	INIT_LIST_HEAD(&wrr_rq->ready_list);
+	wrr_rq->rq = rq;
+	wrr_rq->num_running = 0;
 }
 #ifdef CONFIG_FAIR_GROUP_SCHED
 static void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
